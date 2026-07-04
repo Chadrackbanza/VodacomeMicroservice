@@ -1,0 +1,19 @@
+# Exemple : Interdire nginx inférieur à 1.25
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: block-old-nginx
+spec:
+  validationFailureAction: enforce
+  rules:
+  - name: validate-nginx-version
+    match:
+      resources:
+        kinds:
+          - Pod
+    validate:
+      message: "Utilisez une version de Nginx >= 1.25 pour des raisons de sécurité."
+      pattern:
+        spec:
+          containers:
+          - image: "nginx:1.2[0-4]*" # Bloque tout ce qui commence par 1.20 à 1.24

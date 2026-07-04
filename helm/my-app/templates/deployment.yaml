@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: vodaservice  # Correction de KSV-0110
+spec:
+  template:
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27-alpine # Correction : on évite 'latest' et on prend une version stable
+        securityContext:
+          runAsNonRoot: true     # Correction de KSV-0106 et KSV-0118
+          runAsUser: 1000

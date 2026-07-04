@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-security-annotation
+spec:
+  validationFailureAction: enforce
+  rules:
+  - name: check-security-annotation
+    match:
+      resources:
+        kinds:
+        - Deployment
+    validate:
+      message: "Chaque déploiement doit avoir l'annotation 'security: verified'."
+      pattern:
+        metadata:
+          annotations:
+            security: "verified"

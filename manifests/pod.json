@@ -1,0 +1,14 @@
+{
+  "kind": "Pod",
+  "metadata": { "name": "test-pod" },
+  "spec": {
+    "containers": [
+      {
+        "name": "app-container",
+        "env": [
+          { "name": "DB_PASSWORD", "value": "my-secret-password" }
+        ]
+      }
+    ]
+  }
+}

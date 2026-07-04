@@ -1,0 +1,6 @@
+.kube/
+.minikube/
+.docker/
+.cache/
+.local/
+*.deb
