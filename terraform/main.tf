@@ -1,10 +1,17 @@
 # vodaservice/terraform/main.tf
+
 resource "aws_s3_bucket" "b" {
   bucket = "mon-bucket-prive-5g"
 }
 
-# FAILLE : Ce bucket est ouvert à tout le monde
-resource "aws_s3_bucket_acl" "b_acl" {
+# CORRECTION : Blocage de tout accès public au bucket
+resource "aws_s3_bucket_public_access_block" "b_access_block" {
   bucket = aws_s3_bucket.b.id
-  acl    = "public-read-write" 
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
+
+# Suppression de la ressource aws_s3_bucket_acl qui créait la faille
