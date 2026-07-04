@@ -1,0 +1,32 @@
+name: "Scan de Sécurité avec Trivy"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Scan IaC avec Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '1' 
+          severity: 'CRITICAL,HIGH'
+
+      - name: Scan d'image Docker
+        uses: aquasecurity/trivy-action@master
+        with:
+          # Remplace par le nom de ton image si besoin
+          image-ref: 'nginx:latest'
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
