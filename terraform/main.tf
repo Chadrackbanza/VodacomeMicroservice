@@ -1,27 +1,18 @@
-# vodaservice/terraform/main.tf
-
-resource "aws_s3_bucket" "b" {
-  bucket = "mon-bucket-prive-5g"
+# 1. Création d'une clé KMS pour le chiffrement
+resource "aws_kms_key" "s3_key" {
+  description             = "Clé pour le chiffrement du bucket S3"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
 }
 
-# 1. Blocage de tout accès public (Déjà présent)
-resource "aws_s3_bucket_public_access_block" "b_access_block" {
-  bucket = aws_s3_bucket.b.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
+# 2. Association au bucket S3
 resource "aws_s3_bucket_server_side_encryption_configuration" "b_encryption" {
   bucket = aws_s3_bucket.b.id
 
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm     = "aws:kms"
-      # Remplace cette valeur par l'ARN ou l'ID de ta clé KMS réelle
-      kms_master_key_id = "arn:aws:kms:region:account-id:key/ta-cle-kms-id" 
+      kms_master_key_id = aws_kms_key.s3_key.arn
     }
   }
 }

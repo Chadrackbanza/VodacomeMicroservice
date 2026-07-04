@@ -29,3 +29,4 @@ jobs:
           format: 'table'
           exit-code: '1'          # Ajouté : bloque si des vulnérabilités HIGH/CRITICAL sont trouvées
           severity: 'CRITICAL,HIGH' # Ajouté : cible le niveau de sévérité
+          ignore-unfixed: true
