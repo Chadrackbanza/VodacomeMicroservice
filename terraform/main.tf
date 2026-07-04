@@ -14,13 +14,14 @@ resource "aws_s3_bucket_public_access_block" "b_access_block" {
   restrict_public_buckets = true
 }
 
-# 2. Ajout du chiffrement côté serveur (Correction AWS-0132)
+# 2. Ajout du chiffrement avec KMS (Correction AWS-0132)
 resource "aws_s3_bucket_server_side_encryption_configuration" "b_encryption" {
   bucket = aws_s3_bucket.b.id
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      # On passe de AES256 à aws:kms pour satisfaire la règle
+      sse_algorithm = "aws:kms"
     }
   }
 }
